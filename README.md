@@ -35,7 +35,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/jhon7697/solid-syst
 
 ## 🚀 After Installation
 
-### Configure Environment Variables
+### 1. Configure Environment Variables
 
 Each bot creates a `.env` file. Edit it with your credentials:
 
@@ -56,18 +56,35 @@ sudo nano /opt/animedekho-bot/.env
 - `MONGO_URL` / `MONGO_URI` → [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier works)
 - `OWNER_ID` → Your Telegram numeric user ID
 
----
+### 2. Build Docker Image
 
-## 📋 Docker Commands
+If the setup script didn't build the image (or you need to rebuild):
 
-### Start Bot
 ```bash
 # AniwatchTvdl
-sudo docker run -d --name aniwatchtv\
---env-file /opt/AniwatchTvdl/.env \
---restart unless-stopped \
---memory=768m \
- aniwatchtv:latest
+cd /opt/AniwatchTvdl
+sudo docker build --progress=plain -t aniwatchtv:latest .
+
+# Hentai DL Bot
+cd /opt/hentai_dl_bot
+sudo docker build --progress=plain -t hentai-bot:latest .
+
+# Animedekho Bot
+cd /opt/animedekho-bot
+sudo docker build --progress=plain -t animedekho:latest .
+```
+
+> **Note:** The `.` at the end is required — it tells Docker to build from the current directory.
+
+### 3. Start Bot
+
+```bash
+# AniwatchTvdl
+sudo docker run -d --name aniwatchtv \
+  --env-file /opt/AniwatchTvdl/.env \
+  --restart unless-stopped \
+  --memory=768m \
+  aniwatchtv:latest
 
 # Hentai DL Bot
 sudo docker run -d --name hentai_dl_bot \
@@ -83,6 +100,10 @@ sudo docker run -d --name animedekho_bot \
   --memory=768m \
   animedekho:latest
 ```
+
+---
+
+## 📋 Docker Commands
 
 ### View Logs
 ```bash
@@ -153,6 +174,8 @@ sudo docker system prune -af
 | Build fails due to RAM | 1GB swap is auto-created. For more: `sudo fallocate -l 2G /swapfile` |
 | Permission denied | Make sure you're running with `sudo` |
 | .env not configured | Edit the `.env` file before starting the container |
+| `docker build` missing argument | Add `.` at the end: `docker build -t name:latest .` |
+| Image not found | Run the build step first (see "Build Docker Image" above) |
 
 ---
 
