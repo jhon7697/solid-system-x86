@@ -96,7 +96,7 @@ cat > "${WORK_DIR}/Dockerfile" << 'DOCKERFILE_EOF'
 # AniwatchTvdl (Cantarella Bot) — x86_64-optimized Dockerfile
 # ─────────────────────────────────────────────────────────────────
 
-FROM --platform=linux/amd64 python:3.11-slim-bookworm
+FROM python:3.11-slim-bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ffmpeg \

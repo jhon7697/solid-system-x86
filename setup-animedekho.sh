@@ -93,7 +93,7 @@ fi
 # Overwrite Dockerfile with x86_64 Optimized version
 echo -e "\n${YELLOW}Creating x86_64-optimized Dockerfile...${NC}"
 cat > Dockerfile << 'DOCKERFILE_EOF'
-FROM --platform=linux/amd64 python:3.11-slim
+FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ffmpeg \
