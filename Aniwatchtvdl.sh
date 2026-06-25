@@ -184,25 +184,16 @@ fi
 banner "Step 6/6 — Building Docker image"
 # ═══════════════════════════════════════════════════════════════════
 
-# -- Add swap if needed --
-info "Checking swap..."
-if [[ $(swapon --show | wc -l) -le 1 ]]; then
-    info "No swap found. Creating 1GB swap file for Docker build..."
-    info "  → dd if=/dev/zero of=/swapfile bs=1M count=1024"
-    dd if=/dev/zero of=/swapfile bs=1M count=1024 status=progress || true
-    chmod 600 /swapfile
-    mkswap /swapfile
-    swapon /swapfile
-    echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
-    echo ""
-    success "1GB swap enabled"
-    free -h
-    echo ""
+# -- Check RAM (swap not needed for 4GB+) --
+info "Checking system resources..."
+RAM_MB=$(free -m | awk '/Mem:/{print $2}')
+info "Available RAM: ${BOLD}${RAM_MB} MB${NC}"
+if [[ ${RAM_MB} -lt 4096 ]]; then
+    warn "Less than 4GB RAM detected. Consider adding swap manually if builds fail."
 else
-    success "Swap already active"
-    free -h
-    echo ""
+    success "Sufficient RAM available (${RAM_MB} MB). No swap needed."
 fi
+echo ""
 
 # -- Stop old container if running --
 info "Cleaning up old containers..."

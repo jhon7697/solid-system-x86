@@ -30,10 +30,14 @@ apt-get update
 apt-get install -y git tar curl gzip gcc python3-dev nano ca-certificates
 
 # ==============================================================================
-# 2. Swap Memory Setup (Crucial for 1GB/2GB RAM instances)
+# 2. Swap Memory Setup (Only if RAM < 4GB)
 # ==============================================================================
-echo -e "\n${YELLOW}Step 2/5 — Configuring Swap Memory...${NC}"
-if free | awk '/^Swap:/ {exit !$2}'; then
+echo -e "\n${YELLOW}Step 2/5 — Checking system resources...${NC}"
+RAM_MB=$(free -m | awk '/^Mem:/{print $2}')
+echo -e "Available RAM: ${RAM_MB} MB"
+if [[ ${RAM_MB} -ge 4096 ]]; then
+    echo -e "${GREEN}[OK] ${RAM_MB} MB RAM detected. No swap needed.${NC}"
+elif free | awk '/^Swap:/ {exit !$2}'; then
     echo -e "${GREEN}[OK] Swap is already active.${NC}"
 else
     echo "Creating 1GB swap file..."
