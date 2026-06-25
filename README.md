@@ -63,7 +63,11 @@ sudo nano /opt/animedekho-bot/.env
 ### Start Bot
 ```bash
 # AniwatchTvdl
-sudo docker run -d --name aniwatchtv \ --env-file /opt/AniwatchTvdl/.env \ --restart unless-stopped \ --memory=768m \ aniwatchtv:latest
+sudo docker run -d --name aniwatchtv\
+--env-file /opt/AniwatchTvdl/.env \
+--restart unless-stopped \
+--memory=768m \
+ aniwatchtv:latest
 
 # Hentai DL Bot
 sudo docker run -d --name hentai_dl_bot \
